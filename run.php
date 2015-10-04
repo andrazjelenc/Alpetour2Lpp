@@ -1,22 +1,11 @@
 <?php
 
-//{04:35, 05:05}, {05:10, 05:40}...
-$alpetour = array();
-$lpp = array();
-
-$voznjaLpp = 7; //lpp time to get from lpp.txt to destination
-
-$varnostneMinuteNaPrestopu = 7; // difference between alpetour arival time and lpp take off :)
-
-$deadLine = '08:04'; //when you need to be at lpp destination
-
-function readData()
+function readData($pathAlpetour, $pathLpp, $voznjaLpp)
 {
 	global $alpetour;
 	global $lpp;
-	global $voznjaLpp;
 	
-	$content = file_get_contents('alpetour.txt');
+	$content = file_get_contents($pathAlpetour);
 	$content = explode("\r\n",$content);
 	unset($content[0]);
 
@@ -26,7 +15,7 @@ function readData()
 		$alpetour[] = array($data[0],$data[1]);
 	}
 
-	$content = file_get_contents('lpp.txt');
+	$content = file_get_contents($pathLpp);
 	$content = explode("\r\n",$content);
 
 	foreach($content as $index => $minute)
@@ -69,14 +58,10 @@ function readData()
 	}
 }
 
-
-
-function calculate()
+function calculate($varnostneMinuteNaPrestopu, $deadLine )
 {
 	global $alpetour;
 	global $lpp;
-	global $varnostneMinuteNaPrestopu;
-	global $deadLine;
 	
 	$result = '';
 	foreach($alpetour as $prevoz1)
@@ -112,6 +97,20 @@ function calculate()
 	
 }
 
-readData();
-calculate();
+//{04:35, 05:05}, {05:10, 05:40}...
+//global
+$alpetour = array();
+$lpp = array();
+
+
+$pathAlpetour = 'alpetour.txt';
+$pathLpp = 'lpp2.txt';
+
+
+$voznjaLpp = 12; //lpp time to get from lpp.txt to destination
+$varnostneMinuteNaPrestopu = 4; // difference between alpetour arival time and lpp take off :)
+$deadLine = '11:09'; //when you need to be at lpp destination
+
+readData($pathAlpetour, $pathLpp, $voznjaLpp);
+calculate($varnostneMinuteNaPrestopu, $deadLine);
 ?>
